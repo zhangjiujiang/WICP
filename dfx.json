@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "WICP": {
+      "main": "src/WICP/service/wicp.mo",
+      "type": "motoko"
+    },
+    "WICP_assets": {
+      "dependencies": [
+        "WICP"
+      ],
+      "frontend": {
+        "entrypoint": "src/WICP_assets/src/index.html"
+      },
+      "source": [
+        "src/WICP_assets/assets",
+        "dist/WICP_assets/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "vessel sources"
+    }
+  },
+  "dfx": "0.8.4",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}

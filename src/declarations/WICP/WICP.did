@@ -1,0 +1,108 @@
+type erc20_token = 
+ service {
+   acceptCycles: () -> ();
+   accountId: () -> (text);
+   approve: (ApproveRequest) -> ();
+   availableCycles: () -> (nat) query;
+   balance: (text) -> (BalanceResponse) query;
+   call_id: (opt SubAccount__1) -> (text);
+   canister_balance: () -> (ICPTs);
+   canister_id: (opt SubAccount__1) -> (text);
+   deposit: (opt SubAccount__1, nat64) -> (WICPResult);
+   extensions: () -> (vec Extension) query;
+   metadata: (TokenIdentifier__1) -> (Result) query;
+   transfer: (TransferRequest) -> (TransferResponse);
+   withdraw: (ICP, text) -> (WICPResult);
+ };
+type WICPResult = 
+ variant {
+   err: Err;
+   ok: bool;
+ };
+type User = 
+ variant {
+   address: AccountIdentifier;
+   "principal": principal;
+ };
+type TransferResponse = 
+ variant {
+   err:
+    variant {
+      CannotNotify: AccountIdentifier;
+      InsufficientBalance;
+      InvalidToken: TokenIdentifier;
+      Other: text;
+      Rejected;
+      Unauthorized: AccountIdentifier;
+    };
+   ok: Balance;
+ };
+type TransferRequest = 
+ record {
+   amount: Balance;
+   from: User;
+   memo: Memo;
+   notify: bool;
+   subaccount: opt SubAccount;
+   to: text;
+   token: TokenIdentifier;
+ };
+type TokenIdentifier__1 = text;
+type TokenIdentifier = text;
+type SubAccount__1 = vec nat8;
+type SubAccount = vec nat8;
+type Result = 
+ variant {
+   err: CommonError;
+   ok: Metadata;
+ };
+type Metadata = 
+ variant {
+   fungible:
+    record {
+      decimals: nat8;
+      metadata: opt blob;
+      name: text;
+      symbol: text;
+    };
+   nonfungible: record {metadata: opt blob;};
+ };
+type Memo = blob;
+type ICPTs = record {e8s: nat64;};
+type ICP = record {e8s: nat64;};
+type Extension = text;
+type Err = 
+ variant {
+   balanceEnough;
+   heightExist;
+   insufficientFunds;
+   invaildHeight;
+   otherErr;
+   queryBlockErr;
+   userNoExist;
+ };
+type CommonError__1 = 
+ variant {
+   InvalidToken: TokenIdentifier;
+   Other: text;
+ };
+type CommonError = 
+ variant {
+   InvalidToken: TokenIdentifier;
+   Other: text;
+ };
+type BalanceResponse = 
+ variant {
+   err: CommonError__1;
+   ok: Balance;
+ };
+type Balance = nat64;
+type ApproveRequest = 
+ record {
+   allowance: Balance;
+   spender: principal;
+   subaccount: opt SubAccount;
+   token: TokenIdentifier;
+ };
+type AccountIdentifier = text;
+service : (text, text, nat8, principal) -> erc20_token
